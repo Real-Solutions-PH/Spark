@@ -86,18 +86,20 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="px-4 py-6 space-y-6">
+    <div className="px-4 py-6 lg:px-8 lg:py-8 space-y-6 lg:max-w-5xl">
       {/* Greeting */}
-      <div>
-        <h1 className="font-heading text-2xl font-bold text-spark-neutral-900">
-          Welcome back
-        </h1>
-        {profile?.energy_type && (
-          <p className="text-sm text-spark-neutral-500 mt-1">
-            <Zap className="w-3.5 h-3.5 inline mr-1 text-spark-primary-400" />
-            {profile.energy_type}
-          </p>
-        )}
+      <div className="lg:flex lg:items-end lg:justify-between">
+        <div>
+          <h1 className="font-heading text-2xl lg:text-3xl font-bold text-spark-neutral-900">
+            Welcome back
+          </h1>
+          {profile?.energy_type && (
+            <p className="text-sm text-spark-neutral-500 mt-1">
+              <Zap className="w-3.5 h-3.5 inline mr-1 text-spark-primary-400" />
+              {profile.energy_type}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Profile Summary Card */}
@@ -149,13 +151,13 @@ export default function DashboardPage() {
         </TabsList>
 
         {["active", "completed", "all"].map((tab) => (
-          <TabsContent key={tab} value={tab} className="mt-4 space-y-3">
+          <TabsContent key={tab} value={tab} className="mt-4 space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
             <AnimatePresence mode="wait">
               {filteredExperiments.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center py-12 text-spark-neutral-400"
+                  className="text-center py-12 text-spark-neutral-400 lg:col-span-2"
                 >
                   <Sparkles className="w-8 h-8 mx-auto mb-3 opacity-40" />
                   <p className="text-sm">No experiments here yet.</p>
@@ -278,7 +280,7 @@ export default function DashboardPage() {
 
       {/* Generate New Experiments Button */}
       <div className="pt-2 pb-4">
-        <Button className="w-full bg-spark-primary-500 hover:bg-spark-primary-600 text-white shadow-spark-medium h-12 text-sm font-semibold">
+        <Button className="w-full lg:w-auto bg-spark-primary-500 hover:bg-spark-primary-600 text-white shadow-spark-medium h-12 text-sm font-semibold lg:px-8">
           <RefreshCw className="w-4 h-4 mr-2" />
           Generate New Experiments
         </Button>

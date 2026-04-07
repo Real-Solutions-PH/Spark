@@ -134,7 +134,12 @@ export default function QuizPage() {
             </span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-spark-neutral-100 [&>div]:bg-spark-primary-500" />
+          <div className="h-2 w-full rounded-full bg-spark-neutral-100 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-spark-primary-500 transition-all duration-300 ease-in-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
       </div>
 

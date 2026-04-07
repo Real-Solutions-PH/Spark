@@ -181,7 +181,7 @@ export default function QuizResultsPage() {
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
-          <p className="font-sans text-sm text-spark-neutral-400">
+          <p className="font-sans my-4 text-sm text-spark-neutral-400">
             Want to keep your results?{" "}
             <Link
               href="/signup"

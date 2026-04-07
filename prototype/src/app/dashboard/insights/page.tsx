@@ -61,10 +61,10 @@ export default function InsightsPage() {
   const progressPercent = Math.min(100, (feedbackCount / 5) * 100);
 
   return (
-    <div className="px-4 py-6 space-y-6">
+    <div className="px-4 py-6 lg:px-8 lg:py-8 space-y-6 lg:max-w-5xl">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="font-heading text-2xl font-bold text-spark-neutral-900">
+        <h1 className="font-heading text-2xl lg:text-3xl font-bold text-spark-neutral-900">
           Insights
         </h1>
         {/* Demo Toggle */}
@@ -84,7 +84,7 @@ export default function InsightsPage() {
           transition={{ duration: 0.5 }}
           className="space-y-6"
         >
-          <Card className="bg-white shadow-spark-medium border-spark-neutral-100 overflow-hidden">
+          <Card className="bg-white shadow-spark-medium border-spark-neutral-100 overflow-hidden lg:max-w-lg lg:mx-auto">
             <CardContent className="pt-8 pb-8 px-6 text-center space-y-5">
               <div className="w-16 h-16 rounded-full bg-spark-primary-100 flex items-center justify-center mx-auto">
                 <Lock className="w-7 h-7 text-spark-primary-400" />
@@ -157,7 +157,7 @@ export default function InsightsPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="space-y-8"
+          className="space-y-8 lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0"
         >
           {(
             ["light_up_patterns", "avoid_patterns", "emerging_strengths"] as const
