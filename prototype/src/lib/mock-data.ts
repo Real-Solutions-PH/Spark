@@ -1,0 +1,491 @@
+import type {
+  QuizQuestion,
+  UserProfile,
+  Experiment,
+  ExperimentFeedback,
+  InsightsData,
+  JourneyData,
+  Notification,
+} from "./api/types";
+
+export const mockQuizQuestions: QuizQuestion[] = [
+  {
+    id: "q1",
+    text: "When you have a free afternoon with no obligations, what do you naturally gravitate toward?",
+    type: "single_select",
+    options: [
+      { id: "q1a", text: "Creating something with my hands", emoji: "🎨" },
+      { id: "q1b", text: "Diving into a book or learning something new", emoji: "📚" },
+      { id: "q1c", text: "Calling a friend or planning a get-together", emoji: "💬" },
+      { id: "q1d", text: "Organizing or improving something in my space", emoji: "✨" },
+      { id: "q1e", text: "Going outside for a walk or adventure", emoji: "🌿" },
+    ],
+    dimensions: ["energy_type", "strength_category"],
+    progress: 8,
+    total_questions: 12,
+    current_index: 0,
+  },
+  {
+    id: "q2",
+    text: "Which of these scenarios would make you lose track of time?",
+    description: "Pick all that resonate with you",
+    type: "multi_select",
+    options: [
+      { id: "q2a", text: "Solving a complex puzzle or problem", emoji: "🧩" },
+      { id: "q2b", text: "Helping someone work through a challenge", emoji: "🤝" },
+      { id: "q2c", text: "Designing or decorating a space", emoji: "🏠" },
+      { id: "q2d", text: "Writing, journaling, or storytelling", emoji: "✍️" },
+      { id: "q2e", text: "Planning an event or coordinating people", emoji: "📋" },
+      { id: "q2f", text: "Learning a new skill or technique", emoji: "🔬" },
+    ],
+    dimensions: ["strength_category", "skill_pattern"],
+    progress: 17,
+    total_questions: 12,
+    current_index: 1,
+  },
+  {
+    id: "q3",
+    text: "How much do you agree: \"I feel most alive when I'm working with others\"",
+    type: "slider",
+    slider_config: {
+      min: 1,
+      max: 7,
+      min_label: "Strongly Disagree",
+      max_label: "Strongly Agree",
+      step: 1,
+    },
+    dimensions: ["energy_type", "motivation_driver"],
+    progress: 25,
+    total_questions: 12,
+    current_index: 2,
+  },
+  {
+    id: "q4",
+    text: "When you receive a compliment, which type makes you beam the most?",
+    type: "single_select",
+    options: [
+      { id: "q4a", text: "\"You're so creative!\"", emoji: "🌟" },
+      { id: "q4b", text: "\"You really understand people\"", emoji: "💛" },
+      { id: "q4c", text: "\"You make everything run so smoothly\"", emoji: "⚡" },
+      { id: "q4d", text: "\"You always come up with clever solutions\"", emoji: "💡" },
+      { id: "q4e", text: "\"You inspire people around you\"", emoji: "🔥" },
+    ],
+    dimensions: ["strength_category", "motivation_driver"],
+    progress: 33,
+    total_questions: 12,
+    current_index: 3,
+  },
+  {
+    id: "q5",
+    text: "Rank these from most to least energizing for you",
+    description: "Drag to reorder — most energizing at the top",
+    type: "rank_order",
+    options: [
+      { id: "q5a", text: "Building or making things" },
+      { id: "q5b", text: "Connecting with people" },
+      { id: "q5c", text: "Exploring ideas and learning" },
+      { id: "q5d", text: "Bringing order to chaos" },
+      { id: "q5e", text: "Leading or mentoring others" },
+    ],
+    dimensions: ["energy_type", "skill_pattern", "strength_category"],
+    progress: 42,
+    total_questions: 12,
+    current_index: 4,
+  },
+  {
+    id: "q6",
+    text: "In a group project, which role do you naturally fall into?",
+    type: "single_select",
+    options: [
+      { id: "q6a", text: "The idea generator", emoji: "💡" },
+      { id: "q6b", text: "The organizer who keeps things on track", emoji: "📊" },
+      { id: "q6c", text: "The mediator who makes sure everyone is heard", emoji: "🎯" },
+      { id: "q6d", text: "The doer who rolls up their sleeves", emoji: "💪" },
+      { id: "q6e", text: "The researcher who digs deep", emoji: "🔍" },
+    ],
+    dimensions: ["skill_pattern", "strength_category"],
+    progress: 50,
+    total_questions: 12,
+    current_index: 5,
+  },
+  {
+    id: "q7",
+    text: "How much do you agree: \"I need freedom to do things my own way\"",
+    type: "slider",
+    slider_config: {
+      min: 1,
+      max: 7,
+      min_label: "Strongly Disagree",
+      max_label: "Strongly Agree",
+      step: 1,
+    },
+    dimensions: ["motivation_driver"],
+    progress: 58,
+    total_questions: 12,
+    current_index: 6,
+  },
+  {
+    id: "q8",
+    text: "What kind of challenge excites you most?",
+    type: "single_select",
+    options: [
+      { id: "q8a", text: "A blank canvas — starting from nothing", emoji: "🎨" },
+      { id: "q8b", text: "A broken system — fixing what's not working", emoji: "🔧" },
+      { id: "q8c", text: "A human problem — helping people feel better", emoji: "💗" },
+      { id: "q8d", text: "A growth opportunity — scaling something small", emoji: "🌱" },
+      { id: "q8e", text: "A mystery — figuring out something unknown", emoji: "🕵️" },
+    ],
+    dimensions: ["strength_category", "energy_type"],
+    progress: 67,
+    total_questions: 12,
+    current_index: 7,
+  },
+  {
+    id: "q9",
+    text: "Pick the environments where you do your best thinking",
+    description: "Select up to 3",
+    type: "multi_select",
+    options: [
+      { id: "q9a", text: "Quiet solo space", emoji: "🧘" },
+      { id: "q9b", text: "Buzzy coffee shop", emoji: "☕" },
+      { id: "q9c", text: "While walking or moving", emoji: "🚶" },
+      { id: "q9d", text: "Brainstorming with others", emoji: "💭" },
+      { id: "q9e", text: "Late at night", emoji: "🌙" },
+      { id: "q9f", text: "Right after exercise", emoji: "🏃" },
+    ],
+    dimensions: ["energy_type"],
+    progress: 75,
+    total_questions: 12,
+    current_index: 8,
+  },
+  {
+    id: "q10",
+    text: "How much do you agree: \"I love getting better at things and mastering skills\"",
+    type: "slider",
+    slider_config: {
+      min: 1,
+      max: 7,
+      min_label: "Strongly Disagree",
+      max_label: "Strongly Agree",
+      step: 1,
+    },
+    dimensions: ["motivation_driver"],
+    progress: 83,
+    total_questions: 12,
+    current_index: 9,
+  },
+  {
+    id: "q11",
+    text: "When you look back on your proudest moments, they usually involve...",
+    type: "single_select",
+    options: [
+      { id: "q11a", text: "Making something beautiful or meaningful", emoji: "✨" },
+      { id: "q11b", text: "Helping someone have a breakthrough", emoji: "🌟" },
+      { id: "q11c", text: "Solving a problem everyone else gave up on", emoji: "🏆" },
+      { id: "q11d", text: "Bringing people together for something special", emoji: "🎉" },
+      { id: "q11e", text: "Learning something really difficult", emoji: "📖" },
+    ],
+    dimensions: ["strength_category", "motivation_driver"],
+    progress: 92,
+    total_questions: 12,
+    current_index: 10,
+  },
+  {
+    id: "q12",
+    text: "If you could wake up tomorrow with a new ability, which feels most exciting?",
+    type: "single_select",
+    options: [
+      { id: "q12a", text: "The ability to create stunning visual art", emoji: "🎨" },
+      { id: "q12b", text: "The ability to understand anyone's perspective instantly", emoji: "🔮" },
+      { id: "q12c", text: "The ability to see the perfect solution to any problem", emoji: "⚡" },
+      { id: "q12d", text: "The ability to inspire anyone to take action", emoji: "🔥" },
+      { id: "q12e", text: "The ability to learn any skill in a day", emoji: "🚀" },
+    ],
+    dimensions: ["strength_category", "energy_type", "skill_pattern"],
+    progress: 100,
+    total_questions: 12,
+    current_index: 11,
+  },
+];
+
+export const mockProfile: UserProfile = {
+  id: "profile-1",
+  user_id: "user-1",
+  strength_scores: {
+    creative: 0.85,
+    empathetic: 0.78,
+    analytical: 0.62,
+    connector: 0.71,
+    organizer: 0.45,
+    explorer: 0.68,
+  },
+  energy_type: "creative-flow",
+  skill_pattern: "builder",
+  motivation_driver: "autonomy",
+  top_strengths: [
+    {
+      name: "Creative Expression",
+      score: 0.85,
+      description:
+        "You come alive when making something new. Whether it's ideas, visuals, or experiences — creation is your language.",
+      category: "creative",
+    },
+    {
+      name: "Empathic Understanding",
+      score: 0.78,
+      description:
+        "You naturally tune into how others feel. People trust you because you genuinely see them.",
+      category: "empathetic",
+    },
+    {
+      name: "Curious Connector",
+      score: 0.71,
+      description:
+        "You love bringing people and ideas together. You see links that others miss.",
+      category: "connector",
+    },
+  ],
+  is_active: true,
+  created_at: "2026-04-07T10:00:00Z",
+};
+
+export const mockExperiments: Experiment[] = [
+  {
+    id: "exp-1",
+    user_id: "user-1",
+    title: "Color a friend's mood",
+    description:
+      "Ask a friend how they're feeling today, then spend 15 minutes creating a small abstract drawing or color palette that captures their mood. Share it with them and notice their reaction.",
+    time_estimate_minutes: 30,
+    difficulty: "easy",
+    category: "Creative Expression",
+    discovery_teaser:
+      "You might discover how naturally you translate emotions into visuals",
+    strength_tags: ["creative", "empathetic"],
+    energy_alignment: "creative-flow",
+    status: "pending",
+    generation_batch: 1,
+    generated_at: "2026-04-07T10:05:00Z",
+    created_at: "2026-04-07T10:05:00Z",
+  },
+  {
+    id: "exp-2",
+    user_id: "user-1",
+    title: "Rearrange a bookshelf by feeling",
+    description:
+      "Pick a bookshelf (yours or a friend's) and reorganize it not by genre or author, but by the feeling each book gives you. Group the cozy ones, the inspiring ones, the challenging ones.",
+    time_estimate_minutes: 45,
+    difficulty: "easy",
+    category: "Creative Expression",
+    discovery_teaser:
+      "You might notice how you naturally create order through an emotional lens",
+    strength_tags: ["creative", "organizer"],
+    energy_alignment: "creative-flow",
+    status: "active",
+    generation_batch: 1,
+    generated_at: "2026-04-07T10:05:00Z",
+    created_at: "2026-04-07T10:05:00Z",
+  },
+  {
+    id: "exp-3",
+    user_id: "user-1",
+    title: "Interview someone about their passion",
+    description:
+      "Find someone who lights up about their work or hobby. Ask them 3 questions about what draws them in. Listen without planning your response — just be curious.",
+    time_estimate_minutes: 30,
+    difficulty: "medium",
+    category: "Empathic Connection",
+    discovery_teaser:
+      "You might discover how energizing deep listening is for you",
+    strength_tags: ["empathetic", "connector"],
+    energy_alignment: "collaborative-energy",
+    status: "pending",
+    generation_batch: 1,
+    generated_at: "2026-04-07T10:05:00Z",
+    created_at: "2026-04-07T10:05:00Z",
+  },
+  {
+    id: "exp-4",
+    user_id: "user-1",
+    title: "Solve a stranger's problem",
+    description:
+      "Browse a community forum or subreddit and find someone asking for help with something you know about. Write a thoughtful, detailed response. Notice how it feels to help without any expectation.",
+    time_estimate_minutes: 20,
+    difficulty: "easy",
+    category: "Problem Solving",
+    discovery_teaser:
+      "You might find that your analytical side loves being in service of others",
+    strength_tags: ["analytical", "empathetic"],
+    energy_alignment: "solo-deep-work",
+    status: "completed",
+    generation_batch: 1,
+    generated_at: "2026-04-07T10:05:00Z",
+    created_at: "2026-04-07T10:05:00Z",
+    feedback: {
+      id: "fb-4",
+      experiment_id: "exp-4",
+      user_id: "user-1",
+      outcome: "loved",
+      reflection: "This felt amazing! I spent an hour and didn't even notice the time fly.",
+      created_at: "2026-04-08T14:30:00Z",
+    },
+  },
+  {
+    id: "exp-5",
+    user_id: "user-1",
+    title: "Curate a micro-exhibition",
+    description:
+      "Gather 5 objects from your home that tell a story about who you are right now. Arrange them on a table, take a photo, and write a one-sentence caption for each.",
+    time_estimate_minutes: 40,
+    difficulty: "stretch",
+    category: "Self-Expression",
+    discovery_teaser:
+      "You might discover your natural curatorial eye and storytelling instinct",
+    strength_tags: ["creative", "explorer"],
+    energy_alignment: "creative-flow",
+    status: "completed",
+    generation_batch: 1,
+    generated_at: "2026-04-07T10:05:00Z",
+    created_at: "2026-04-07T10:05:00Z",
+    feedback: {
+      id: "fb-5",
+      experiment_id: "exp-5",
+      user_id: "user-1",
+      outcome: "okay",
+      reflection: "Interesting exercise but felt a bit forced. Liked the photo part though.",
+      created_at: "2026-04-09T11:00:00Z",
+    },
+  },
+];
+
+export const mockFeedbackHistory: ExperimentFeedback[] = [
+  {
+    id: "fb-4",
+    experiment_id: "exp-4",
+    user_id: "user-1",
+    outcome: "loved",
+    reflection: "This felt amazing! I spent an hour and didn't even notice the time fly.",
+    created_at: "2026-04-08T14:30:00Z",
+  },
+  {
+    id: "fb-5",
+    experiment_id: "exp-5",
+    user_id: "user-1",
+    outcome: "okay",
+    reflection: "Interesting exercise but felt a bit forced. Liked the photo part though.",
+    created_at: "2026-04-09T11:00:00Z",
+  },
+];
+
+export const mockInsights: InsightsData = {
+  light_up_patterns: [
+    {
+      type: "light_up",
+      title: "Helping others through your unique lens",
+      description:
+        "You come alive when you can use your creative and empathetic strengths to help someone else. The combination of understanding people and expressing that understanding is where your magic lives.",
+      evidence: ["Solve a stranger's problem", "Color a friend's mood"],
+      strength_tags: ["creative", "empathetic"],
+      score: 0.88,
+    },
+    {
+      type: "light_up",
+      title: "Deep, focused creative work",
+      description:
+        "You thrive in states of creative flow — when time disappears and you're fully absorbed in making something. Solo creative time isn't isolation for you; it's energizing.",
+      evidence: ["Curate a micro-exhibition", "Color a friend's mood"],
+      strength_tags: ["creative"],
+      score: 0.82,
+    },
+  ],
+  avoid_patterns: [
+    {
+      type: "avoid",
+      title: "Highly structured, rigid tasks",
+      description:
+        "Tasks that feel overly prescriptive or leave no room for your personal interpretation tend to drain you. You need space to make things your own.",
+      evidence: ["Rearrange a bookshelf by feeling"],
+      strength_tags: ["organizer"],
+      score: 0.45,
+    },
+  ],
+  emerging_strengths: [
+    {
+      type: "emerging_strength",
+      title: "Creative Empathy",
+      description:
+        "An emerging pattern: you have a rare ability to translate emotional understanding into tangible creative output. This bridges two strengths in a way that feels uniquely you.",
+      evidence: [
+        "Solve a stranger's problem",
+        "Color a friend's mood",
+        "Curate a micro-exhibition",
+      ],
+      strength_tags: ["creative", "empathetic"],
+      score: 0.83,
+    },
+  ],
+  total_experiments_completed: 2,
+  feedback_entries_count: 2,
+  unlock_threshold: 5,
+  is_unlocked: false,
+  progress_to_unlock: 2,
+};
+
+export const mockInsightsUnlocked: InsightsData = {
+  ...mockInsights,
+  is_unlocked: true,
+  feedback_entries_count: 6,
+  total_experiments_completed: 6,
+  progress_to_unlock: 5,
+};
+
+export const mockNotifications: Notification[] = [
+  {
+    id: "notif-1",
+    user_id: "user-1",
+    experiment_id: "exp-2",
+    experiment_title: "Rearrange a bookshelf by feeling",
+    type: "nudge",
+    message:
+      "Hey — still thinking about rearranging that bookshelf? No pressure. You can also skip it.",
+    shown_at: null,
+    dismissed_at: null,
+    created_at: "2026-04-10T09:00:00Z",
+  },
+];
+
+export const mockJourney: JourneyData = {
+  entries: [
+    {
+      experiment: mockExperiments[3],
+      feedback: mockFeedbackHistory[0],
+      date: "2026-04-08",
+      week_label: "This Week",
+    },
+    {
+      experiment: mockExperiments[4],
+      feedback: mockFeedbackHistory[1],
+      date: "2026-04-09",
+      week_label: "This Week",
+    },
+  ],
+  groups: [
+    {
+      label: "This Week",
+      entries: [
+        {
+          experiment: mockExperiments[3],
+          feedback: mockFeedbackHistory[0],
+          date: "2026-04-08",
+          week_label: "This Week",
+        },
+        {
+          experiment: mockExperiments[4],
+          feedback: mockFeedbackHistory[1],
+          date: "2026-04-09",
+          week_label: "This Week",
+        },
+      ],
+    },
+  ],
+};
