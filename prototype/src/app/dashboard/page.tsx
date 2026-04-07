@@ -20,9 +20,12 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Clock, Zap, Heart, Meh, X, RefreshCw, Sparkles } from "lucide-react";
-import { mockExperiments, mockProfile } from "@/lib/mock-data";
-
-type Outcome = "loved" | "okay" | "not_for_me" | "skipped";
+import {
+  useProfile,
+  useExperiments,
+  useSubmitExperimentFeedback,
+} from "@/lib/api/hooks";
+import type { FeedbackOutcome } from "@/lib/api/types";
 
 const difficultyColors: Record<string, string> = {
   easy: "bg-green-100 text-green-700 border-green-200",
@@ -55,13 +58,14 @@ export default function DashboardPage() {
   const [selectedExperiment, setSelectedExperiment] = useState<string | null>(
     null
   );
-  const [selectedOutcome, setSelectedOutcome] = useState<Outcome | null>(null);
+  const [selectedOutcome, setSelectedOutcome] = useState<FeedbackOutcome | null>(null);
   const [reflection, setReflection] = useState("");
 
-  const profile = mockProfile;
-  const experiments = mockExperiments || [];
+  const { data: profile } = useProfile();
+  const { data: experiments = [] } = useExperiments();
+  const feedbackMutation = useSubmitExperimentFeedback();
 
-  const filteredExperiments = experiments.filter((exp: any) => {
+  const filteredExperiments = experiments.filter((exp) => {
     if (activeTab === "active")
       return exp.status === "active" || exp.status === "pending";
     if (activeTab === "completed") return exp.status === "completed";
@@ -76,13 +80,19 @@ export default function DashboardPage() {
   };
 
   const submitFeedback = () => {
-    // In a real app this would call an API
-    console.log("Feedback:", {
-      experimentId: selectedExperiment,
-      outcome: selectedOutcome,
-      reflection,
-    });
-    setFeedbackOpen(false);
+    if (!selectedExperiment || !selectedOutcome) return;
+    feedbackMutation.mutate(
+      {
+        experimentId: selectedExperiment,
+        outcome: selectedOutcome,
+        reflection: reflection || undefined,
+      },
+      {
+        onSuccess: () => {
+          setFeedbackOpen(false);
+        },
+      }
+    );
   };
 
   return (
@@ -152,7 +162,7 @@ export default function DashboardPage() {
 
         {["active", "completed", "all"].map((tab) => (
           <TabsContent key={tab} value={tab} className="mt-4 space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {filteredExperiments.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -163,7 +173,7 @@ export default function DashboardPage() {
                   <p className="text-sm">No experiments here yet.</p>
                 </motion.div>
               ) : (
-                filteredExperiments.map((exp: any, i: number) => (
+                filteredExperiments.map((exp, i) => (
                   <motion.div
                     key={exp.id}
                     custom={i}
@@ -194,13 +204,13 @@ export default function DashboardPage() {
 
                         {/* Badges Row */}
                         <div className="flex flex-wrap gap-1.5">
-                          {exp.time_minutes && (
+                          {exp.time_estimate_minutes && (
                             <Badge
                               variant="outline"
                               className="text-xs text-spark-neutral-500 border-spark-neutral-200"
                             >
                               <Clock className="w-3 h-3 mr-1" />
-                              {exp.time_minutes} min
+                              {exp.time_estimate_minutes} min
                             </Badge>
                           )}
                           {exp.difficulty && (
@@ -311,7 +321,7 @@ export default function DashboardPage() {
               ).map(({ key, icon: Icon, label, activeColor }) => (
                 <button
                   key={key}
-                  onClick={() => setSelectedOutcome(key as Outcome)}
+                  onClick={() => setSelectedOutcome(key as FeedbackOutcome)}
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     selectedOutcome === key
                       ? activeColor
@@ -348,7 +358,7 @@ export default function DashboardPage() {
             {/* Submit */}
             <Button
               onClick={submitFeedback}
-              disabled={!selectedOutcome}
+              disabled={!selectedOutcome || feedbackMutation.isPending}
               className="w-full bg-spark-primary-500 hover:bg-spark-primary-600 text-white disabled:opacity-40 h-11"
             >
               Submit Feedback

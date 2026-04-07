@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Sparkles, Sun, Shield, TrendingUp, Lock } from "lucide-react";
-import { mockInsights, mockInsightsUnlocked } from "@/lib/mock-data";
+import { useInsights } from "@/lib/api/hooks";
 
 const sectionConfig = {
   light_up_patterns: {
@@ -52,10 +51,9 @@ const itemVariants = {
 };
 
 export default function InsightsPage() {
-  const [showUnlocked, setShowUnlocked] = useState(false);
+  const { data: insights, isLoading } = useInsights();
 
-  const insights = showUnlocked ? mockInsightsUnlocked : mockInsights;
-  const isLocked = !showUnlocked && insights?.feedback_entries_count !== undefined && insights.feedback_entries_count < 5;
+  const isLocked = !insights?.is_unlocked;
   const feedbackCount = insights?.feedback_entries_count ?? 0;
   const remaining = Math.max(0, 5 - feedbackCount);
   const progressPercent = Math.min(100, (feedbackCount / 5) * 100);
@@ -67,16 +65,13 @@ export default function InsightsPage() {
         <h1 className="font-heading text-2xl lg:text-3xl font-bold text-spark-neutral-900">
           Insights
         </h1>
-        {/* Demo Toggle */}
-        <button
-          onClick={() => setShowUnlocked(!showUnlocked)}
-          className="text-xs px-3 py-1.5 rounded-full border border-spark-neutral-200 text-spark-neutral-500 hover:bg-spark-neutral-100 transition-colors"
-        >
-          {showUnlocked ? "Show Locked" : "Show Unlocked"}
-        </button>
       </div>
 
-      {isLocked ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center py-16">
+          <div className="w-8 h-8 border-2 border-spark-primary-200 border-t-spark-primary-500 rounded-full animate-spin" />
+        </div>
+      ) : isLocked ? (
         /* Locked State */
         <motion.div
           initial={{ opacity: 0, y: 20 }}

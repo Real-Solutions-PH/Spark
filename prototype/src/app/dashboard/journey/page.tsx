@@ -4,90 +4,7 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Meh, X, SkipForward, Calendar, Sparkles } from "lucide-react";
-import { mockJourney, mockExperiments } from "@/lib/mock-data";
-
-// Inline enriched journey data for a fuller timeline
-const journeyEntries = [
-  {
-    id: "j1",
-    experiment_title: "Morning Curiosity Walk",
-    date: "2026-04-07",
-    outcome: "loved" as const,
-    reflection: "Noticed three things I'd never seen before on my usual route. Felt genuinely awake for the first time in weeks.",
-    week: "This Week",
-  },
-  {
-    id: "j2",
-    experiment_title: "Write a Letter to Your Future Self",
-    date: "2026-04-06",
-    outcome: "loved" as const,
-    reflection: "This made me emotional in a good way. Realized I have clearer goals than I thought.",
-    week: "This Week",
-  },
-  {
-    id: "j3",
-    experiment_title: "Cook Something Without a Recipe",
-    date: "2026-04-05",
-    outcome: "okay" as const,
-    reflection: "It was fun but stressful. I kept wanting to Google things.",
-    week: "This Week",
-  },
-  {
-    id: "j4",
-    experiment_title: "5-Minute Sketch Challenge",
-    date: "2026-04-04",
-    outcome: "not_for_me" as const,
-    reflection: "Drawing just isn't my thing, but I appreciate trying it.",
-    week: "This Week",
-  },
-  {
-    id: "j5",
-    experiment_title: "Digital Detox Hour",
-    date: "2026-03-31",
-    outcome: "loved" as const,
-    reflection: "One hour turned into three. Read a whole chapter of my book.",
-    week: "Last Week",
-  },
-  {
-    id: "j6",
-    experiment_title: "Compliment a Stranger",
-    date: "2026-03-30",
-    outcome: "okay" as const,
-    reflection: null,
-    week: "Last Week",
-  },
-  {
-    id: "j7",
-    experiment_title: "Rearrange Your Workspace",
-    date: "2026-03-29",
-    outcome: "loved" as const,
-    reflection: "My desk feels completely different now. More open.",
-    week: "Last Week",
-  },
-  {
-    id: "j8",
-    experiment_title: "Learn 3 Words in a New Language",
-    date: "2026-03-28",
-    outcome: "skipped" as const,
-    reflection: null,
-    week: "Last Week",
-  },
-];
-
-// Also merge in mockJourney entries if available
-const allEntries = [
-  ...journeyEntries,
-  ...((mockJourney?.entries || []) as any[])
-    .filter((j: any) => !journeyEntries.find((e: any) => e.id === (j.experiment?.id || j.date)))
-    .map((j: any) => ({
-      id: j.experiment?.id || j.date,
-      experiment_title: j.experiment?.title || "Experiment",
-      date: j.date,
-      outcome: j.feedback?.outcome || "pending",
-      reflection: j.feedback?.reflection || null,
-      week: j.week_label || "Earlier",
-    })),
-];
+import { useJourney } from "@/lib/api/hooks";
 
 const outcomeConfig = {
   loved: {
@@ -124,9 +41,17 @@ const outcomeConfig = {
   },
 };
 
-// Group entries by week
-function groupByWeek(entries: typeof allEntries) {
-  const groups: Record<string, typeof allEntries> = {};
+interface JourneyEntryFlat {
+  id: string;
+  experiment_title: string;
+  date: string;
+  outcome: string;
+  reflection: string | null;
+  week: string;
+}
+
+function groupByWeek(entries: JourneyEntryFlat[]) {
+  const groups: Record<string, JourneyEntryFlat[]> = {};
   for (const entry of entries) {
     const week = entry.week || "Other";
     if (!groups[week]) groups[week] = [];
@@ -158,6 +83,17 @@ function formatDate(dateStr: string) {
 }
 
 export default function JourneyPage() {
+  const { data: journeyData } = useJourney();
+
+  const allEntries: JourneyEntryFlat[] = (journeyData?.entries || []).map((j) => ({
+    id: j.experiment?.id || j.date,
+    experiment_title: j.experiment?.title || "Experiment",
+    date: j.date,
+    outcome: j.feedback?.outcome || "pending",
+    reflection: j.feedback?.reflection || null,
+    week: j.week_label || "Earlier",
+  }));
+
   const grouped = groupByWeek(allEntries);
   const weekOrder = ["This Week", "Last Week", "Earlier"];
   const sortedWeeks = Object.keys(grouped).sort(

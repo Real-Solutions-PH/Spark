@@ -263,10 +263,18 @@ export const mockExperiments: Experiment[] = [
       "You might discover how naturally you translate emotions into visuals",
     strength_tags: ["creative", "empathetic"],
     energy_alignment: "creative-flow",
-    status: "pending",
+    status: "completed",
     generation_batch: 1,
     generated_at: "2026-04-07T10:05:00Z",
     created_at: "2026-04-07T10:05:00Z",
+    feedback: {
+      id: "fb-1",
+      experiment_id: "exp-1",
+      user_id: "user-1",
+      outcome: "loved",
+      reflection: "I loved translating her stress into deep blues and purples — she said it felt like I really got her.",
+      created_at: "2026-04-07T18:00:00Z",
+    },
   },
   {
     id: "exp-2",
@@ -281,10 +289,18 @@ export const mockExperiments: Experiment[] = [
       "You might notice how you naturally create order through an emotional lens",
     strength_tags: ["creative", "organizer"],
     energy_alignment: "creative-flow",
-    status: "active",
+    status: "completed",
     generation_batch: 1,
     generated_at: "2026-04-07T10:05:00Z",
     created_at: "2026-04-07T10:05:00Z",
+    feedback: {
+      id: "fb-2",
+      experiment_id: "exp-2",
+      user_id: "user-1",
+      outcome: "not_for_me",
+      reflection: "Felt too structured for me. I kept wanting to just browse the books instead.",
+      created_at: "2026-04-08T10:00:00Z",
+    },
   },
   {
     id: "exp-3",
@@ -299,10 +315,18 @@ export const mockExperiments: Experiment[] = [
       "You might discover how energizing deep listening is for you",
     strength_tags: ["empathetic", "connector"],
     energy_alignment: "collaborative-energy",
-    status: "pending",
+    status: "completed",
     generation_batch: 1,
     generated_at: "2026-04-07T10:05:00Z",
     created_at: "2026-04-07T10:05:00Z",
+    feedback: {
+      id: "fb-3",
+      experiment_id: "exp-3",
+      user_id: "user-1",
+      outcome: "loved",
+      reflection: "Talked to my neighbor about her garden for 40 minutes. I felt so energized after!",
+      created_at: "2026-04-08T16:30:00Z",
+    },
   },
   {
     id: "exp-4",
@@ -359,6 +383,30 @@ export const mockExperiments: Experiment[] = [
 ];
 
 export const mockFeedbackHistory: ExperimentFeedback[] = [
+  {
+    id: "fb-1",
+    experiment_id: "exp-1",
+    user_id: "user-1",
+    outcome: "loved",
+    reflection: "I loved translating her stress into deep blues and purples — she said it felt like I really got her.",
+    created_at: "2026-04-07T18:00:00Z",
+  },
+  {
+    id: "fb-2",
+    experiment_id: "exp-2",
+    user_id: "user-1",
+    outcome: "not_for_me",
+    reflection: "Felt too structured for me. I kept wanting to just browse the books instead.",
+    created_at: "2026-04-08T10:00:00Z",
+  },
+  {
+    id: "fb-3",
+    experiment_id: "exp-3",
+    user_id: "user-1",
+    outcome: "loved",
+    reflection: "Talked to my neighbor about her garden for 40 minutes. I felt so energized after!",
+    created_at: "2026-04-08T16:30:00Z",
+  },
   {
     id: "fb-4",
     experiment_id: "exp-4",
@@ -424,19 +472,15 @@ export const mockInsights: InsightsData = {
       score: 0.83,
     },
   ],
-  total_experiments_completed: 2,
-  feedback_entries_count: 2,
+  total_experiments_completed: 5,
+  feedback_entries_count: 5,
   unlock_threshold: 5,
-  is_unlocked: false,
-  progress_to_unlock: 2,
+  is_unlocked: true,
+  progress_to_unlock: 5,
 };
 
 export const mockInsightsUnlocked: InsightsData = {
   ...mockInsights,
-  is_unlocked: true,
-  feedback_entries_count: 6,
-  total_experiments_completed: 6,
-  progress_to_unlock: 5,
 };
 
 export const mockNotifications: Notification[] = [
@@ -457,14 +501,32 @@ export const mockNotifications: Notification[] = [
 export const mockJourney: JourneyData = {
   entries: [
     {
-      experiment: mockExperiments[3],
+      experiment: mockExperiments[0],
       feedback: mockFeedbackHistory[0],
+      date: "2026-04-07",
+      week_label: "This Week",
+    },
+    {
+      experiment: mockExperiments[1],
+      feedback: mockFeedbackHistory[1],
+      date: "2026-04-08",
+      week_label: "This Week",
+    },
+    {
+      experiment: mockExperiments[2],
+      feedback: mockFeedbackHistory[2],
+      date: "2026-04-08",
+      week_label: "This Week",
+    },
+    {
+      experiment: mockExperiments[3],
+      feedback: mockFeedbackHistory[3],
       date: "2026-04-08",
       week_label: "This Week",
     },
     {
       experiment: mockExperiments[4],
-      feedback: mockFeedbackHistory[1],
+      feedback: mockFeedbackHistory[4],
       date: "2026-04-09",
       week_label: "This Week",
     },
@@ -474,14 +536,32 @@ export const mockJourney: JourneyData = {
       label: "This Week",
       entries: [
         {
-          experiment: mockExperiments[3],
+          experiment: mockExperiments[0],
           feedback: mockFeedbackHistory[0],
+          date: "2026-04-07",
+          week_label: "This Week",
+        },
+        {
+          experiment: mockExperiments[1],
+          feedback: mockFeedbackHistory[1],
+          date: "2026-04-08",
+          week_label: "This Week",
+        },
+        {
+          experiment: mockExperiments[2],
+          feedback: mockFeedbackHistory[2],
+          date: "2026-04-08",
+          week_label: "This Week",
+        },
+        {
+          experiment: mockExperiments[3],
+          feedback: mockFeedbackHistory[3],
           date: "2026-04-08",
           week_label: "This Week",
         },
         {
           experiment: mockExperiments[4],
-          feedback: mockFeedbackHistory[1],
+          feedback: mockFeedbackHistory[4],
           date: "2026-04-09",
           week_label: "This Week",
         },
